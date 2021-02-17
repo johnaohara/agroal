@@ -31,6 +31,7 @@ public class AgroalConnectionPoolConfigurationSupplier implements Supplier<Agroa
 
     private TransactionIntegration transactionIntegration = none();
     private boolean flushOnClose = false;
+    private boolean enhancedLeakDetection = false;
     private int initialSize = 0;
     private volatile int minSize = 0;
     private volatile int maxSize = MAX_VALUE;
@@ -55,6 +56,7 @@ public class AgroalConnectionPoolConfigurationSupplier implements Supplier<Agroa
         this.connectionFactoryConfigurationSupplier = new AgroalConnectionFactoryConfigurationSupplier( existingConfiguration.connectionFactoryConfiguration() );
         this.transactionIntegration = existingConfiguration.transactionIntegration();
         this.flushOnClose = existingConfiguration.flushOnClose();
+        this.enhancedLeakDetection = existingConfiguration.enhancedLeakDetection();
         this.initialSize = existingConfiguration.initialSize();
         this.minSize = existingConfiguration.minSize();
         this.maxSize = existingConfiguration.maxSize();
@@ -128,6 +130,22 @@ public class AgroalConnectionPoolConfigurationSupplier implements Supplier<Agroa
     public AgroalConnectionPoolConfigurationSupplier flushOnClose(boolean flush) {
         checkLock();
         flushOnClose = flush;
+        return this;
+    }
+
+    /**
+     * Enables enhanced leak detection.
+     */
+    public AgroalConnectionPoolConfigurationSupplier enhancedLeakDetection() {
+        return enhancedLeakDetection( true );
+    }
+
+    /**
+     * Enables or disables enhanced leak detection. Default is false.
+     */
+    public AgroalConnectionPoolConfigurationSupplier enhancedLeakDetection(boolean enhanced) {
+        checkLock();
+        enhancedLeakDetection = enhanced;
         return this;
     }
 
@@ -288,6 +306,11 @@ public class AgroalConnectionPoolConfigurationSupplier implements Supplier<Agroa
             @Override
             public TransactionIntegration transactionIntegration() {
                 return transactionIntegration;
+            }
+
+            @Override
+            public boolean enhancedLeakDetection() {
+                return enhancedLeakDetection;
             }
 
             @Override

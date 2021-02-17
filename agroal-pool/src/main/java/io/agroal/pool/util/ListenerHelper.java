@@ -6,6 +6,8 @@ package io.agroal.pool.util;
 import io.agroal.api.AgroalDataSourceListener;
 import io.agroal.pool.ConnectionHandler;
 
+import java.util.Arrays;
+
 /**
  * @author <a href="lbarreiro@redhat.com">Luis Barreiro</a>
  */
@@ -65,6 +67,18 @@ public final class ListenerHelper {
     public static void fireOnConnectionLeak(AgroalDataSourceListener[] listeners, ConnectionHandler handler) {
         for ( AgroalDataSourceListener listener : listeners ) {
             listener.onConnectionLeak( handler.getConnection(), handler.getHoldingThread() );
+            if ( handler.getAcquisitionStackTrace() != null ) {
+                listener.onInfo( "Stack trace of leaked connection " + handler.getConnection() + ": " + Arrays.toString( handler.getAcquisitionStackTrace() ) );
+            }
+            if ( handler.getConnectionOperations() != null ) {
+                listener.onInfo( "Operation executed on leaked connection " + handler.getConnection() + ": " + String.join( ", ", handler.getConnectionOperations() ) );
+            }
+            if ( handler.getConnectionOperations() != null && handler.getConnectionOperations().contains( "unwrap" ) ) {
+                listener.onWarning( "A possible cause for the leak of connection " + handler.getConnection() + " is a call to the unwrap() method. close() needs to be called on the connection object provided by the pool." );
+            }
+            if ( handler.getLastOperationStackTrace() != null ) {
+                listener.onInfo( "Stack trace of last executed operation on leaked connection " + handler.getConnection() + ": " + Arrays.toString( handler.getLastOperationStackTrace() ) );
+            }
         }
     }
 

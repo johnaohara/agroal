@@ -72,6 +72,11 @@ public interface AgroalConnectionPoolConfiguration {
     boolean flushOnClose();
 
     /**
+     * Provide extra information on leak detection, provided as INFO messages on AgroalDataSourceListener.
+     */
+    boolean enhancedLeakDetection();
+
+    /**
      * The number of connections to be created when the pool starts. Can be smaller than min or bigger than max.
      */
     int initialSize();
