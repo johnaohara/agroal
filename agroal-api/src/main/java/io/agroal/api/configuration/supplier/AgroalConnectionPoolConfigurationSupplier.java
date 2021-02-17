@@ -31,7 +31,7 @@ public class AgroalConnectionPoolConfigurationSupplier implements Supplier<Agroa
 
     private TransactionIntegration transactionIntegration = none();
     private boolean flushOnClose = false;
-    private boolean enhancedLeakDetection = false;
+    private boolean enhancedLeakDetection = true;
     private int initialSize = 0;
     private volatile int minSize = 0;
     private volatile int maxSize = MAX_VALUE;
