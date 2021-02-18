@@ -79,6 +79,11 @@ public final class ListenerHelper {
             if ( handler.getLastOperationStackTrace() != null ) {
                 listener.onInfo( "Stack trace of last executed operation on leaked connection " + handler.getConnection() + ": " + Arrays.toString( handler.getLastOperationStackTrace() ) );
             }
+            if ( handler.isEnlisted() ) {
+                listener.onInfo( "Leaked connection " + handler.getConnection() + " is enlisted. Please make sure the associated transaction completes." );
+            } else {
+                listener.onInfo( "Leaked connection " + handler.getConnection() + " is not enlisted. To return it to the pool use the flush(LEAK) operation." );
+            }
         }
     }
 

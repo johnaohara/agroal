@@ -16,6 +16,7 @@ import io.agroal.pool.util.UncheckedArrayList;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -339,6 +340,9 @@ public final class ConnectionPool implements Pool {
                 StackTraceElement[] trace = currentThread().getStackTrace();
                 checkedOutHandler.setAcquisitionStackTrace( copyOfRange( trace, 4, trace.length) );
             }
+        }
+        if ( !checkedOutHandler.isEnlisted() ) {
+            fireOnInfo( listeners, "No tx acquiring connection " + checkedOutHandler.getConnection() );
         }
         return checkedOutHandler.newConnectionWrapper();
     }

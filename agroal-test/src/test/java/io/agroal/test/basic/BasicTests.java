@@ -312,7 +312,7 @@ public class BasicTests {
                     fail( format( "Missed detection of {0} leaks", latch.getCount() ) );
                 }
                 Thread.sleep( 100 ); // hold for a bit to allow for enhanced info
-                assertEquals( 3, listener.infoCount, "Not enough info on extended leak detection" );
+                assertEquals( 1 + 4, listener.infoCount, "Not enough info on extended leak detection" );
                 assertEquals( 1, listener.warningCount, "Not enough info on extended leak detection" );
             } catch ( InterruptedException e ) {
                 fail( "Test fail due to interrupt" );
