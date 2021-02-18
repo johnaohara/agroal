@@ -68,7 +68,7 @@ public final class ListenerHelper {
         for ( AgroalDataSourceListener listener : listeners ) {
             listener.onConnectionLeak( handler.getConnection(), handler.getHoldingThread() );
             if ( handler.getAcquisitionStackTrace() != null ) {
-                listener.onInfo( "Stack trace of leaked connection " + handler.getConnection() + ": " + Arrays.toString( handler.getAcquisitionStackTrace() ) );
+                listener.onInfo( "Leaked connection " + handler.getConnection() + " acquired at: " + Arrays.toString( handler.getAcquisitionStackTrace() ) );
             }
             if ( handler.getConnectionOperations() != null ) {
                 listener.onInfo( "Operation executed on leaked connection " + handler.getConnection() + ": " + String.join( ", ", handler.getConnectionOperations() ) );
@@ -77,7 +77,7 @@ public final class ListenerHelper {
                 listener.onWarning( "A possible cause for the leak of connection " + handler.getConnection() + " is a call to the unwrap() method. close() needs to be called on the connection object provided by the pool." );
             }
             if ( handler.getLastOperationStackTrace() != null ) {
-                listener.onInfo( "Stack trace of last executed operation on leaked connection " + handler.getConnection() + ": " + Arrays.toString( handler.getLastOperationStackTrace() ) );
+                listener.onInfo( "Stack trace of last executed operation on " + handler.getConnection() + ": " + Arrays.toString( handler.getLastOperationStackTrace() ) );
             }
             if ( handler.isEnlisted() ) {
                 listener.onInfo( "Leaked connection " + handler.getConnection() + " is enlisted. Please make sure the associated transaction completes." );
