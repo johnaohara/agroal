@@ -70,10 +70,10 @@ public final class ConnectionHandler implements TransactionAware {
     private List<String> connectionOperations;
 
     // for expiration (CHECKED_IN connections) and leak detection (CHECKED_OUT connections)
-    private long lastAccess;
+    private volatile long lastAccess;
 
     // flag to indicate that this the connection is enlisted to a transaction
-    private boolean enlisted;
+    private volatile boolean enlisted;
 
     // reference to the task that flushes this connection when it gets over it's maxLifetime
     private Future<?> maxLifetimeTask;
