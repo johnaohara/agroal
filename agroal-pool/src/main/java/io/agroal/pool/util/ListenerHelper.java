@@ -68,6 +68,11 @@ public final class ListenerHelper {
         for ( AgroalDataSourceListener listener : listeners ) {
             listener.onConnectionLeak( handler.getConnection(), handler.getHoldingThread() );
             if ( handler.getAcquisitionStackTrace() != null ) {
+                if ( handler.isEnlisted() ) {
+                    listener.onInfo( "Leaked connection " + handler.getConnection() + " is enlisted. Please make sure the associated transaction completes." );
+                } else {
+                    listener.onInfo( "Leaked connection " + handler.getConnection() + " is not enlisted. To return it to the pool use the flush(LEAK) operation." );
+                }
                 listener.onInfo( "Leaked connection " + handler.getConnection() + " acquired at: " + Arrays.toString( handler.getAcquisitionStackTrace() ) );
             }
             if ( handler.getConnectionOperations() != null ) {
@@ -78,11 +83,6 @@ public final class ListenerHelper {
             }
             if ( handler.getLastOperationStackTrace() != null ) {
                 listener.onInfo( "Stack trace of last executed operation on " + handler.getConnection() + ": " + Arrays.toString( handler.getLastOperationStackTrace() ) );
-            }
-            if ( handler.isEnlisted() ) {
-                listener.onInfo( "Leaked connection " + handler.getConnection() + " is enlisted. Please make sure the associated transaction completes." );
-            } else {
-                listener.onInfo( "Leaked connection " + handler.getConnection() + " is not enlisted. To return it to the pool use the flush(LEAK) operation." );
             }
         }
     }
